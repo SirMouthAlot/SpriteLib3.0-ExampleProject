@@ -20,7 +20,7 @@ public:
 
 	//Each scene will need to have a different
 	//init, as each scene's contents will be different
-	virtual void InitScene(float windowWidth, float windowHeight) { printf("windowWidth: %f, windowHeight: %f", windowWidth, windowHeight); }
+	virtual void InitScene(float windowWidth, float windowHeight);
 
 	virtual void Update() {}
 

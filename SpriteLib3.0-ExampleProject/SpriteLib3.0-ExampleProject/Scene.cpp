@@ -29,6 +29,46 @@ void Scene::SaveScene()
 	File::CreateJSON(m_name + ".json", scene);
 }
 
+void Scene::InitScene(float windowWidth, float windowHeight)
+{
+	//Default scene class init just includes a camera so stuff doesn't immediately crash
+	printf("You shouldn't be running this, while Initializing this Scene Type.");
+
+	//Dynamically allocates the register
+	m_sceneReg = new entt::registry;
+
+	//Attach the register
+	ECS::AttachRegister(m_sceneReg);
+
+	//Sets up aspect ratio for the camera
+	float aspectRatio = windowWidth / windowHeight;
+
+	//Setup Main Camera entity
+	{
+		//Creates Camera entity
+		auto entity = ECS::CreateEntity();
+
+		//Creates new orthographic camera
+		ECS::AttachComponent<Camera>(entity);
+		ECS::AttachComponent<HorizontalScroll>(entity);
+		ECS::AttachComponent<VerticalScroll>(entity);
+		//ECS::AttachComponent<HorizontalScroll>(entity);
+		vec4 temp = vec4(-75.f, 75.f, -75.f, 75.f);
+		ECS::GetComponent<Camera>(entity).SetOrthoSize(temp);
+		ECS::GetComponent<Camera>(entity).SetWindowSize(vec2(float(windowWidth), float(windowHeight)));
+		ECS::GetComponent<Camera>(entity).Orthographic(aspectRatio, temp.x, temp.y, temp.z, temp.w, -100.f, 100.f);
+
+		//attaches the camera to the vertical scroll
+		ECS::GetComponent<HorizontalScroll>(entity).SetCam(&ECS::GetComponent<Camera>(entity));
+		ECS::GetComponent<VerticalScroll>(entity).SetCam(&ECS::GetComponent<Camera>(entity));
+
+		//Sets up the Identifier
+		unsigned int bitHolder = EntityIdentifier::CameraBit();
+		ECS::SetUpIdentifier(entity, bitHolder, "Horizontal Scrolling Cam");
+		ECS::SetIsMainCamera(entity, true);
+	}
+}
+
 entt::registry* Scene::GetScene() const
 {
 	return m_sceneReg;
