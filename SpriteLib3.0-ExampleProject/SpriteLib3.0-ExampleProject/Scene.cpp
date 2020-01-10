@@ -50,17 +50,11 @@ void Scene::InitScene(float windowWidth, float windowHeight)
 
 		//Creates new orthographic camera
 		ECS::AttachComponent<Camera>(entity);
-		ECS::AttachComponent<HorizontalScroll>(entity);
-		ECS::AttachComponent<VerticalScroll>(entity);
 		//ECS::AttachComponent<HorizontalScroll>(entity);
 		vec4 temp = vec4(-75.f, 75.f, -75.f, 75.f);
 		ECS::GetComponent<Camera>(entity).SetOrthoSize(temp);
 		ECS::GetComponent<Camera>(entity).SetWindowSize(vec2(float(windowWidth), float(windowHeight)));
 		ECS::GetComponent<Camera>(entity).Orthographic(aspectRatio, temp.x, temp.y, temp.z, temp.w, -100.f, 100.f);
-
-		//attaches the camera to the vertical scroll
-		ECS::GetComponent<HorizontalScroll>(entity).SetCam(&ECS::GetComponent<Camera>(entity));
-		ECS::GetComponent<VerticalScroll>(entity).SetCam(&ECS::GetComponent<Camera>(entity));
 
 		//Sets up the Identifier
 		unsigned int bitHolder = EntityIdentifier::CameraBit();
